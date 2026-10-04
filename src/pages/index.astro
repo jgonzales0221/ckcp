@@ -1,17 +1,164 @@
 ---
+import Base from "../layouts/Base.aasro";
 
+const slides = [
+  { src: "/images/church-front.jpg", alt: "Christ the King Catholic Parish", caption: "Christ the King Catholic Parish", credit: "Photo by Christ the King" },
+  { src: "/images/sanctuary.jpg", alt: "Sanctuary", caption: "Join us for Mass", credit: "Photo by Brittney" },
+  { src: "/images/parish-life.jpg", alt: "Parish life", caption: "A parish in Belmont, Pueblo", credit: "Photo by Steve Eller", creditHref: "https://www.ellerdrone.com/" },
+];
 ---
+<Base>
+  <section class="hero" aria-label="Parish photos">
+    {slides.map((slide, i) => (
+      <figure class:list={["slide", { active: i === 0 }]}>
+        <div class="frame">
+          <img src={slide.src} alt={slide.alt} />
+          <figcaption>
+            <span class="caption">{slide.caption}</span>
+            {slide.creditHref ? (
+              <a href={slide.creditHref} class="credit">{slide.credit}</a>
+            ) : (
+              <span class="credit">{slide.credit}</span>
+            )}
+          </figcaption>
+        </div>
+      </figure>
+    ))}
+    <button class="prev" type="button" aria-label="Previous photo">‹</button>
+    <button class="next" type="button" aria-label="Next photo">›</button>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <section class="info">
+    <div>
+      <h2>Mass Schedule</h2>
+      <p>Saturday: 4:00 p.m.</p>
+      <p>Sunday: 8:00 a.m., 11:00 a.m., 7:00 p.m.</p>
+      <p>Tuesday–Friday: 7:30 a.m.</p>
+    </div>
+    <div>
+      <h2>Confession</h2>
+      <p>Saturday: 2:45–3:45 p.m.</p>
+      <p>Or by appointment</p>
+    </div>
+    <div>
+      <h2>Office</h2>
+      <p>1708 Horseshoe Drive</p>
+      <p>Pueblo, CO 81001</p>
+      <p>(719) 542-9248</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  let current = 0;
+  const show = (n) => {
+    slides[current].classList.remove("active");
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add("active");
+  };
+  document.querySelector(".next")?.addEventListener("click", () => show(current + 1));
+  document.querySelector(".prev")?.addEventListener("click", () => show(current - 1));
+  setInterval(() => show(current + 1), 6000);
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    margin-bottom: 64px;
+    background: #e7eef5;
+  }
+
+  .slide {
+    display: none;
+    margin: 0;
+  }
+
+  .slide.active {
+    display: flex;
+    justify-content: center;
+  }
+
+  .frame {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .frame img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 62vh;
+    height: auto;
+  }
+
+  .frame figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    max-width: 200px;
+    padding: 6px 8px;
+    background: rgba(28, 40, 52, 0.7);
+    text-align: left;
+  }
+
+  .frame figcaption .caption,
+  .frame figcaption .credit {
+    display: block;
+    color: white;
+    background: none;
+    padding: 0;
+  }
+
+  .frame figcaption .caption {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+
+  .frame figcaption .credit {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    text-decoration: underline;
+  }
+
+  .prev,
+  .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.4rem;
+    background: transparent;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  }
+
+  .prev { left: 12px; }
+  .next { right: 12px; }
+
+  .info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    background: var(--blue);
+    color: white;
+    padding: 24px;
+  }
+
+  .info h2 {
+    color: white;
+    font-family: "Source Sans 3", sans-serif;
+  }
+
+  .info p {
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 700px) {
+    .info { grid-template-columns: 1fr; }
+  }
+</style>
