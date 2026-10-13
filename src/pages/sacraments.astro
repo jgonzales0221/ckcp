@@ -3,9 +3,11 @@ import Base from "../layouts/Base.astro";
 ---
 <Base>
   <section class="page">
-    <h1>Sacraments</h1>
+    <p class="kicker">Sacraments</p>
+    
 
     <h2>Becoming Catholic</h2>
+    <img class="section-photo" src="/images/adultconfirmation.jpg" alt="Becoming Catholic at Christ the King" />
     <p>God has been stirring something in your heart. We are thankful you are looking for the next step.</p>
     <p>Your first step is a conversation. You can ask questions and discern from there. If you were baptized Catholic and still need Confession, Eucharist, or Confirmation, start with the same call.</p>
     <p>Those who want to enter the Church continue through the Order of Christian Initiation of Adults. That process can take several months or longer. Someone already baptized is not baptized again.</p>
@@ -27,6 +29,7 @@ import Base from "../layouts/Base.astro";
     <p>Older children go through Sharlyn Garduno, ext. 114, sgarduno@ctkpueblo.org.</p>
 
     <h2>Baptism</h2>
+    <img class="section-photo" src="/images/baptism.jpg" alt="A baptism at Christ the King" />
     <p>Infants through age 17. Contact Leslie Soell, ext. 113, lsoell@ctkpueblo.org.</p>
     <h3>Baptism requirements</h3>
     <ul>
@@ -65,6 +68,7 @@ import Base from "../layouts/Base.astro";
     </ul>
 
     <h2>Confirmation</h2>
+     <img class="section-photo" src="/images/confirmation.jpg" alt="Confirmation at Christ the King" />
     <p>Incoming 7th and 8th grade, and high school youth who still need the sacrament, after one year of formation. Contact Aden Casarez, ext. 114, or Sarah Nelson, ext. 121, for adults.</p>
     <h3>Requirements</h3>
     <ul>
@@ -95,12 +99,26 @@ import Base from "../layouts/Base.astro";
 
 <style>
   .page {
-    max-width: 760px;
-    padding: 8px 16px 48px 48px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 32px 64px;
+    box-sizing: border-box;
+  }
+
+  .kicker {
+    text-align: center;
+    margin: 0 0 0.25rem;
+    color: var(--gold);
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
   }
 
   h1 {
-    margin-bottom: 1.5rem;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--gold);
   }
 
   h2 {
@@ -140,9 +158,18 @@ import Base from "../layouts/Base.astro";
     line-height: 1.5;
   }
 
+.section-photo {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  object-fit: contain;
+  margin: 1rem auto 1.25rem;
+}
+
   @media (max-width: 700px) {
     .page {
-      padding-left: 8px;
+      padding: 8px 4px 40px;
     }
   }
 </style>
