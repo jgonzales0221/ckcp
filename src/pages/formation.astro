@@ -3,7 +3,13 @@ import Base from "../layouts/Base.astro";
 ---
 <Base>
   <section class="page">
-   <p class="kicker">Formation</p>
+   <h1>Formation</h1>
+   <p class="quote">“As therefore you received Christ Jesus the Lord, so live in him, rooted and built up in him and established in the faith...”</p>
+   <p class="subtitle">Colossians 2:6–7</p>
+
+    <h2>Faith Formation at Christ the King</h2>
+    <p>Faith formation is a lifelong journey of growing in our relationship with Jesus Christ and deepening our understanding of the Catholic faith.</p>
+    <p>Through prayer, Scripture, religious education, and community, we learn to live out the Gospel and grow as disciples of Christ at every stage of life.</p>
 
     <h2>Children</h2>
     <p>Faith formation for elementary grades. Sacramental preparation for First Reconciliation and First Eucharist is listed on the Sacraments page.</p>
@@ -25,6 +31,15 @@ import Base from "../layouts/Base.astro";
     <h2>Register</h2>
     <p>Registration for Formation for All is open.</p>
     <p><a href="https://forms.ministryforms.net/embed.aspx?formId=45ec37d1-842d-48f3-a64b-2b0b16ebd5f0">Registration form</a></p>
+    
+    <h2>Resources for Growing in Faith</h2>
+    <p><a href="https://bible.usccb.org/">Daily readings</a></p>
+    <p><a href="https://formed.org/">Formed</a></p>
+    <p><a href="https://www.usccb.org/prayers/prayers-rosary">Prayers of the Rosary</a></p>
+    <p><a href="https://www.usccb.org/how-to-pray-the-rosary">How to Pra the Rosary</a></p>
+    <h3>Catechism of the Catholic Church</h3>
+    <p>Explore the teachings of the Catholic Church on faith, the sacrements, Christian living, and prayer</p>
+    <p><a href="https://usccb.cld.bz/Catechism-of-the-Catholic-Church2/">Read the Catechism Online</a></p>
   </section>
 </Base>
 <style>
@@ -36,19 +51,27 @@ import Base from "../layouts/Base.astro";
     box-sizing: border-box;
   }
 
-  .kicker {
-    text-align: center;
-    margin: 0 0 0.25rem;
-    color: var(--gold);
-    font-size: 1.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-  }
-
   h1 {
+    text-align: center;
+    color: var(--gold);
+    ont-weight: 600;
     margin: 0 0 0.75rem;
     padding-bottom: 0.6rem;
-    border-bottom: 2px solid var(--gold);
+  }
+  .quote{
+    margin: 0.4rem 0 0.8rem;
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.6;
+
+  }
+  .subtitle{
+    margin: 0.4rem 0 0.8rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1.6;
+
   }
 
   h2 {
@@ -66,7 +89,7 @@ import Base from "../layouts/Base.astro";
     margin-bottom: 0.4rem;
     font-family: "Source Sans 3", sans-serif;
     font-size: 1.2rem;
-    color: var(--ink);
+    color: var(--blue);
   }
 
   p {
