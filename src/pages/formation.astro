@@ -3,9 +3,9 @@ import Base from "../layouts/Base.astro";
 ---
 <Base>
   <section class="page">
-   <h1>Formation</h1>
-   <p class="quote">“As therefore you received Christ Jesus the Lord, so live in him, rooted and built up in him and established in the faith...”</p>
-   <p class="subtitle">Colossians 2:6–7</p>
+    <h1>Formation</h1>
+    <p class="quote">“As therefore you received Christ Jesus the Lord, so live in him, rooted and built up in him and established in the faith...”</p>
+    <p class="subtitle">Colossians 2:6–7</p>
 
     <h2>Faith Formation at Christ the King</h2>
     <p>Faith formation is a lifelong journey of growing in our relationship with Jesus Christ and deepening our understanding of the Catholic faith.</p>
@@ -30,18 +30,36 @@ import Base from "../layouts/Base.astro";
 
     <h2>Register</h2>
     <p>Registration for Formation for All is open.</p>
-    <p><a href="https://forms.ministryforms.net/embed.aspx?formId=45ec37d1-842d-48f3-a64b-2b0b16ebd5f0">Registration form</a></p>
-    
+    <ul>
+      <li><a href="https://forms.ministryforms.net/embed.aspx?formId=45ec37d1-842d-48f3-a64b-2b0b16ebd5f0">Registration form</a></li>
+      <li><a href="/docs/ffa-calendar.pdf">2026–2027 calendar</a></li>
+    </ul>
+
+    <h2>Parish calendar</h2>
+    <p>Click an event to add it to your Google Calendar.</p>
+    <div class="calendar">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=christthekingpueblo%40gmail.com&amp;ctz=America/Denver"
+        title="Parish calendar"
+        loading="lazy"
+      ></iframe>
+    </div>
+
     <h2>Resources for Growing in Faith</h2>
-    <p><a href="https://bible.usccb.org/">Daily readings</a></p>
-    <p><a href="https://formed.org/">Formed</a></p>
-    <p><a href="https://www.usccb.org/prayers/prayers-rosary">Prayers of the Rosary</a></p>
-    <p><a href="https://www.usccb.org/how-to-pray-the-rosary">How to Pra the Rosary</a></p>
+    <ul>
+      <li><a href="https://bible.usccb.org/">Daily readings</a></li>
+      <li><a href="https://formed.org/">Formed</a></li>
+      <li><a href="https://www.usccb.org/prayers/prayers-rosary">Prayers of the Rosary</a></li>
+      <li><a href="https://www.usccb.org/how-to-pray-the-rosary">How to Pray the Rosary</a></li>
+    </ul>
     <h3>Catechism of the Catholic Church</h3>
-    <p>Explore the teachings of the Catholic Church on faith, the sacrements, Christian living, and prayer</p>
-    <p><a href="https://usccb.cld.bz/Catechism-of-the-Catholic-Church2/">Read the Catechism Online</a></p>
+    <p>Explore the teachings of the Catholic Church on faith, the sacraments, Christian living, and prayer.</p>
+    <ul>
+      <li><a href="https://usccb.cld.bz/Catechism-of-the-Catholic-Church2/">Read the Catechism Online</a></li>
+    </ul>
   </section>
 </Base>
+
 <style>
   .page {
     width: 100%;
@@ -54,24 +72,24 @@ import Base from "../layouts/Base.astro";
   h1 {
     text-align: center;
     color: var(--gold);
-    ont-weight: 600;
+    font-weight: 600;
     margin: 0 0 0.75rem;
     padding-bottom: 0.6rem;
   }
-  .quote{
+
+  .quote {
     margin: 0.4rem 0 0.8rem;
     text-align: center;
     font-size: 1.1rem;
     line-height: 1.6;
-
   }
-  .subtitle{
+
+  .subtitle {
     margin: 0.4rem 0 0.8rem;
     text-align: center;
     font-size: 1.1rem;
     font-weight: bold;
     line-height: 1.6;
-
   }
 
   h2 {
@@ -111,18 +129,27 @@ import Base from "../layouts/Base.astro";
     line-height: 1.5;
   }
 
-.section-photo {
-  display: block;
-  width: 100%;
-  max-width: 560px;
-  height: auto;
-  object-fit: contain;
-  margin: 1rem auto 1.25rem;
-}
+  .calendar {
+    margin: 1rem 0 1.5rem;
+    border: 1px solid var(--gold);
+  }
+
+  .calendar iframe {
+    display: block;
+    width: 100%;
+    height: 600px;
+    border: 0;
+  }
 
   @media (max-width: 700px) {
     .page {
       padding: 8px 4px 40px;
     }
+
+    .calendar iframe {
+      height: 450px;
+    }
   }
 </style>
+
+
