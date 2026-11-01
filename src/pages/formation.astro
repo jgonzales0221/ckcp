@@ -6,6 +6,7 @@ import Base from "../layouts/Base.astro";
     <h1>Formation</h1>
     <p class="quote">“As therefore you received Christ Jesus the Lord, so live in him, rooted and built up in him and established in the faith...”</p>
     <p class="subtitle">Colossians 2:6–7</p>
+     <img class="section-photo" src="/images/adult-formation.jpg" alt="Formation" />
 
     <h2>Faith Formation at Christ the King</h2>
     <p>Faith formation is a lifelong journey of growing closer to Jesus Christ and deepening our understanding of the Catholic faith. Through Scripture, prayer, learning, and fellowship with our parish community, we grow as disciples of Christ and learn to live out the Gospel in our daily lives.</p>
@@ -61,73 +62,14 @@ import Base from "../layouts/Base.astro";
 </Base>
 
 <style>
-  .page {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 12px 32px 64px;
-    box-sizing: border-box;
-  }
-h1 {
-  text-align: center !important;
-  color: var(--gold);
-  font-weight: 600;
-  margin: 0 0 0.75rem;
-  padding-bottom: 0.6rem;
+ .section-photo {
+  display: block;
+  width: 40%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  margin: 1rem auto 1.25rem;
 }
-
-.quote {
-  text-align: center;
-  font-style: italic !important;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 0.4rem 0 0.8rem;
-}
-
-.subtitle {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 0.4rem 0 0.8rem;
-}
-
-  h2 {
-    margin-top: 2.5rem;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.35rem;
-    border-bottom: 2px solid var(--gold);
-    font-family: "Source Sans 3", sans-serif;
-    font-size: 1.6rem;
-    color: var(--blue);
-  }
-
-  h3 {
-    margin-top: 1.25rem;
-    margin-bottom: 0.4rem;
-    font-family: "Source Sans 3", sans-serif;
-    font-size: 1.2rem;
-    color: var(--blue);
-  }
-
-  p {
-    margin: 0.4rem 0 0.8rem;
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-
-  ul {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    margin: 0.4rem 0 1.25rem;
-  }
-
-  li {
-    margin-bottom: 0.35rem;
-    color: var(--ink);
-    font-size: 1.05rem;
-    line-height: 1.5;
-  }
 
   .calendar {
     margin: 1rem 0 1.5rem;
