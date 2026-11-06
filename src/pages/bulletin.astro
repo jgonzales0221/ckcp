@@ -1,12 +1,26 @@
 ---
 import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const bulletins = (await getCollection("bulletins")).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 <Base>
-    <secetion class="page">
-        <h1>Bulletin</h1>
-    </secetion>
-   
-</Base>
-<style>
+  <section class="page">
+    <h1>Bulletin</h1>
 
-</style>
+    {bulletins.length === 0 && <p>No bulletins posted yet.</p>}
+
+    {bulletins.map((bulletin) => (
+      <article>
+        <h2>{bulletin.data.title}</h2>
+        <p><small>{new Date(bulletin.data.date).toLocaleDateString()}</small></p>
+        <div set:html={bulletin.body} />
+        {bulletin.data.pdf && (
+          <p><a href={bulletin.data.pdf} target="_blank" rel="noopener">Download PDF</a></p>
+        )}
+      </article>
+    ))}
+  </section>
+</Base>

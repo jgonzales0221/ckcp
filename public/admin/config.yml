@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: jgonzales0221/ckcp
+  branch: main
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: bulletins
+    label: Bulletins
+    folder: src/content/bulletins
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - { label: PDF, name: pdf, widget: file, required: false }
+      - { label: Body, name: body, widget: markdown }
