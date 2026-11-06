@@ -1,0 +1,169 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base>
+  <section class="page">
+    <h1>Our Team</h1>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="/images/fr-norba.jpg" alt="Rev. Zaldy Norba" />
+        <h2>Rev. Zaldy Norba, SSS</h2>
+        <p class="role">Pastor</p>
+        <p>(719) 542-9248 Ext. 116</p>
+        <p><a href="mailto:znorba@ctkpueblo.org">znorba@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/fr-Ayuyao.jpg" alt="Rev. Leo Ayuyao" />
+        <h2>Rev. Leo Ayuyao, SSS</h2>
+        <p class="role">Sacramental Priest</p>
+        <p>(719) 542-9248</p>
+        <p>Leave message with the Parish Office</p>
+        <p><a href="mailto:layuyao@ctkpueblo.org">layuyao@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Deacon-John.jpg" alt="Deacon John Chavez" />
+        <h2>Deacon John Chavez</h2>
+        <p class="role">Deacon</p>
+        <p>(719) 542-9248 Ext. 111</p>
+        <p><a href="mailto:jchavez@ctkpueblo.org">jchavez@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Sarah-Nelson.jpg" alt="Sarah Nelson" />
+        <h2>Sarah Nelson</h2>
+        <p class="role">Pastoral Associate for Adult Faith Formation</p>
+        <p>(719) 542-9248 Ext. 121</p>
+        <p><a href="mailto:snelson@ctkpueblo.org">snelson@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Lori-jenkins.jpg" alt="Lori Judkins" />
+        <h2>Lori Judkins</h2>
+        <p class="role">Pastoral Associate for Liturgical Music</p>
+        <p>(719) 542-9248 Ext. 118</p>
+        <p><a href="mailto:ljudkins@ctkpueblo.org">ljudkins@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Mary-Meissner.jpg" alt="Mary Meissner" />
+        <h2>Mary Meissner</h2>
+        <p class="role">Administrative Assistant</p>
+        <p>(719) 542-9248 Ext. 111</p>
+        <p><a href="mailto:mmeissner@ctkpueblo.org">mmeissner@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Leslie-Soell.jpg" alt="Leslie Soell" />
+        <h2>Leslie Soell</h2>
+        <p class="role">Religious Formation Elementary and Sacramental Preparation Coordinator</p>
+        <p>(719) 542-9248 Ext. 113</p>
+        <p><a href="mailto:lsoell@ctkpueblo.org">lsoell@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/favicon.png" alt="Aden Casarez" />
+        <h2>Aden Casarez</h2>
+        <p class="role">Religious Formation Middle School and High School Coordinator</p>
+        <p>(719) 542-9248 Ext. 114</p>
+        <p><a href="mailto:acasarez@ctkpueblo.org">acasarez@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Mariah-Trask.jpg" alt="Mariah Trask" />
+        <h2>Mariah Trask</h2>
+        <p class="role">Liturgical Minister Coordinator</p>
+        <p>(719) 542-9248 Ext. 112</p>
+        <p><a href="mailto:mtrask@ctkpueblo.org">mtrask@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Sharlyn-garduno.jpg" alt="Sharlyn Garduno" />
+        <h2>Sharlyn Garduno</h2>
+        <p class="role">OCIA and Homebound Ministry</p>
+        <p>(719) 542-9248 Ext. 114</p>
+        <p><a href="mailto:sgarduno@ctkpueblo.org">sgarduno@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Todd-Johnson.jpg" alt="Todd Johnson" />
+        <h2>Todd Johnson</h2>
+        <p class="role">Business Manager</p>
+        <p>(719) 542-9248 Ext. 110</p>
+        <p><a href="mailto:tjohnson@ctkpueblo.org">tjohnson@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/images/Randy-Pfeffer.jpg" alt="Randy Pfeffer" />
+        <h2>Randy Pfeffer</h2>
+        <p class="role">Maintenance Coordinator</p>
+        <p>(719) 542-9248 Ext. 120</p>
+        <p><a href="mailto:rpfeffer@ctkpueblo.org">rpfeffer@ctkpueblo.org</a></p>
+      </div>
+
+      <div class="team-card">
+        <img src="/favicon.png" alt="Gerald Garduno" />
+        <h2>Gerald Garduno</h2>
+        <p class="role">Landscaping</p>
+        <p>(719) 542-9248 Ext. 120</p>
+        <p><a href="mailto:ggarduno@ctkpueblo.org">ggarduno@ctkpueblo.org</a></p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .team-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .team-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    object-position: center top;   /* keeps heads from being cut off */
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+  }
+
+  .team-card h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.2rem;
+    border: none;
+    padding: 0;
+    color: var(--blue);
+  }
+
+  .team-card .role {
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: var(--gold);
+  }
+
+  .team-card p {
+    margin: 0.2rem 0;
+    font-size: 0.95rem;
+  }
+
+  .team-card a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  .team-card a:hover {
+    text-decoration: underline;
+  }
+</style>
