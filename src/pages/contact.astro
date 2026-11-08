@@ -1,115 +1,44 @@
+
 ---
 import Base from "../layouts/Base.astro";
+import teamData from "../data/team.json";
+
+const members = teamData.members;
 ---
+
 <Base>
   <section class="page">
     <h1>Our Team</h1>
 
     <div class="team-grid">
-      <div class="team-card">
-        <img src="/images/fr-norba.jpg" alt="Rev. Zaldy Norba" />
-        <h2>Rev. Zaldy Norba, SSS</h2>
-        <p class="role">Pastor</p>
-        <p>(719) 542-9248 Ext. 116</p>
-        <p><a href="mailto:znorba@ctkpueblo.org">znorba@ctkpueblo.org</a></p>
-      </div>
+      {members.map((member) => (
+        <div class="team-card">
+          <img
+            src={member.photo || "/favicon.png"}
+            alt={member.name}
+          />
 
-      <div class="team-card">
-        <img src="/images/fr-Ayuyao.jpg" alt="Rev. Leo Ayuyao" />
-        <h2>Rev. Leo Ayuyao, SSS</h2>
-        <p class="role">Sacramental Priest</p>
-        <p>(719) 542-9248</p>
-        <p>Leave message with the Parish Office</p>
-        <p><a href="mailto:layuyao@ctkpueblo.org">layuyao@ctkpueblo.org</a></p>
-      </div>
+          <h2>{member.name}</h2>
 
-      <div class="team-card">
-        <img src="/images/Deacon-John.jpg" alt="Deacon John Chavez" />
-        <h2>Deacon John Chavez</h2>
-        <p class="role">Deacon</p>
-        <p>(719) 542-9248 Ext. 111</p>
-        <p><a href="mailto:jchavez@ctkpueblo.org">jchavez@ctkpueblo.org</a></p>
-      </div>
+          <p class="role">{member.role}</p>
 
-      <div class="team-card">
-        <img src="/images/Sarah-Nelson.jpg" alt="Sarah Nelson" />
-        <h2>Sarah Nelson</h2>
-        <p class="role">Pastoral Associate for Adult Faith Formation</p>
-        <p>(719) 542-9248 Ext. 121</p>
-        <p><a href="mailto:snelson@ctkpueblo.org">snelson@ctkpueblo.org</a></p>
-      </div>
+          {member.phone && (
+            <p>{member.phone}</p>
+          )}
 
-      <div class="team-card">
-        <img src="/images/Lori-jenkins.jpg" alt="Lori Judkins" />
-        <h2>Lori Judkins</h2>
-        <p class="role">Pastoral Associate for Liturgical Music</p>
-        <p>(719) 542-9248 Ext. 118</p>
-        <p><a href="mailto:ljudkins@ctkpueblo.org">ljudkins@ctkpueblo.org</a></p>
-      </div>
+          {member.notes && (
+            <p>{member.notes}</p>
+          )}
 
-      <div class="team-card">
-        <img src="/images/Mary-Meissner.jpg" alt="Mary Meissner" />
-        <h2>Mary Meissner</h2>
-        <p class="role">Administrative Assistant</p>
-        <p>(719) 542-9248 Ext. 111</p>
-        <p><a href="mailto:mmeissner@ctkpueblo.org">mmeissner@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/images/Leslie-Soell.jpg" alt="Leslie Soell" />
-        <h2>Leslie Soell</h2>
-        <p class="role">Religious Formation Elementary and Sacramental Preparation Coordinator</p>
-        <p>(719) 542-9248 Ext. 113</p>
-        <p><a href="mailto:lsoell@ctkpueblo.org">lsoell@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/favicon.png" alt="Aden Casarez" />
-        <h2>Aden Casarez</h2>
-        <p class="role">Religious Formation Middle School and High School Coordinator</p>
-        <p>(719) 542-9248 Ext. 114</p>
-        <p><a href="mailto:acasarez@ctkpueblo.org">acasarez@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/images/Mariah-Trask.jpg" alt="Mariah Trask" />
-        <h2>Mariah Trask</h2>
-        <p class="role">Liturgical Minister Coordinator</p>
-        <p>(719) 542-9248 Ext. 112</p>
-        <p><a href="mailto:mtrask@ctkpueblo.org">mtrask@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/images/Sharlyn-garduno.jpg" alt="Sharlyn Garduno" />
-        <h2>Sharlyn Garduno</h2>
-        <p class="role">OCIA and Homebound Ministry</p>
-        <p>(719) 542-9248 Ext. 114</p>
-        <p><a href="mailto:sgarduno@ctkpueblo.org">sgarduno@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/images/Todd-Johnson.jpg" alt="Todd Johnson" />
-        <h2>Todd Johnson</h2>
-        <p class="role">Business Manager</p>
-        <p>(719) 542-9248 Ext. 110</p>
-        <p><a href="mailto:tjohnson@ctkpueblo.org">tjohnson@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/images/Randy-Pfeffer.jpg" alt="Randy Pfeffer" />
-        <h2>Randy Pfeffer</h2>
-        <p class="role">Maintenance Coordinator</p>
-        <p>(719) 542-9248 Ext. 120</p>
-        <p><a href="mailto:rpfeffer@ctkpueblo.org">rpfeffer@ctkpueblo.org</a></p>
-      </div>
-
-      <div class="team-card">
-        <img src="/favicon.png" alt="Gerald Garduno" />
-        <h2>Gerald Garduno</h2>
-        <p class="role">Landscaping</p>
-        <p>(719) 542-9248 Ext. 120</p>
-        <p><a href="mailto:ggarduno@ctkpueblo.org">ggarduno@ctkpueblo.org</a></p>
-      </div>
+          {member.email && (
+            <p>
+              <a href={`mailto:${member.email}`}>
+                {member.email}
+              </a>
+            </p>
+          )}
+        </div>
+      ))}
     </div>
   </section>
 </Base>
@@ -130,16 +59,16 @@ import Base from "../layouts/Base.astro";
     text-align: center;
   }
 
-.team-card img {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;          /* shows the full photo, no cropping */
-  object-position: center;
-  background: #f0f0f0;          /* fills the empty space in the circle */
-  border-radius: 50%;
-  margin-bottom: 0.75rem;
-  padding: 4px;                 /* optional breathing room */
-}
+  .team-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    object-position: center;
+    background: #f0f0f0;
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+    padding: 4px;
+  }
 
   .team-card h2 {
     margin: 0 0 0.25rem;
