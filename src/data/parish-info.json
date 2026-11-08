@@ -1,0 +1,16 @@
+
+{
+  "mass_schedule": [
+    { "day": "Saturday", "time": "4:00 p.m." },
+    { "day": "Sunday", "time": "8:00 a.m., 11:00 a.m., 7:00 p.m." },
+    { "day": "Tuesday–Friday", "time": "7:30 a.m." }
+  ],
+  "confession_schedule": [
+    { "day": "Saturday", "time": "2:45–3:45 p.m." }
+  ],
+  "confession_notes": "Or by appointment",
+  "office_address": "1708 Horseshoe Drive",
+  "office_city": "Pueblo, CO 81001",
+  "office_phone": "(719) 542-9248",
+  "office_hours": ""
+}

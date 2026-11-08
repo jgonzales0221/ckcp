@@ -1,0 +1,109 @@
+
+{
+  "members": [
+    {
+      "name": "Rev. Zaldy Norba, SSS",
+      "role": "Pastor",
+      "phone": "(719) 542-9248 Ext. 116",
+      "email": "znorba@ctkpueblo.org",
+      "photo": "/images/fr-norba.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Rev. Leo Ayuyao, SSS",
+      "role": "Sacramental Priest",
+      "phone": "(719) 542-9248",
+      "email": "layuyao@ctkpueblo.org",
+      "photo": "/images/fr-Ayuyao.jpg",
+      "notes": "Leave message with the Parish Office"
+    },
+    {
+      "name": "Deacon John Chavez",
+      "role": "Deacon",
+      "phone": "(719) 542-9248 Ext. 111",
+      "email": "jchavez@ctkpueblo.org",
+      "photo": "/images/Deacon-John.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Sarah Nelson",
+      "role": "Pastoral Associate for Adult Faith Formation",
+      "phone": "(719) 542-9248 Ext. 121",
+      "email": "snelson@ctkpueblo.org",
+      "photo": "/images/Sarah-Nelson.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Lori Judkins",
+      "role": "Pastoral Associate for Liturgical Music",
+      "phone": "(719) 542-9248 Ext. 118",
+      "email": "ljudkins@ctkpueblo.org",
+      "photo": "/images/Lori-jenkins.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Mary Meissner",
+      "role": "Administrative Assistant",
+      "phone": "(719) 542-9248 Ext. 111",
+      "email": "mmeissner@ctkpueblo.org",
+      "photo": "/images/Mary-Meissner.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Leslie Soell",
+      "role": "Religious Formation Elementary and Sacramental Preparation Coordinator",
+      "phone": "(719) 542-9248 Ext. 113",
+      "email": "lsoell@ctkpueblo.org",
+      "photo": "/images/Leslie-Soell.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Aden Casarez",
+      "role": "Religious Formation Middle School and High School Coordinator",
+      "phone": "(719) 542-9248 Ext. 114",
+      "email": "acasarez@ctkpueblo.org",
+      "photo": "/favicon.png",
+      "notes": ""
+    },
+    {
+      "name": "Mariah Trask",
+      "role": "Liturgical Minister Coordinator",
+      "phone": "(719) 542-9248 Ext. 112",
+      "email": "mtrask@ctkpueblo.org",
+      "photo": "/images/Mariah-Trask.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Sharlyn Garduno",
+      "role": "OCIA and Homebound Ministry",
+      "phone": "(719) 542-9248 Ext. 114",
+      "email": "sgarduno@ctkpueblo.org",
+      "photo": "/images/Sharlyn-garduno.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Todd Johnson",
+      "role": "Business Manager",
+      "phone": "(719) 542-9248 Ext. 110",
+      "email": "tjohnson@ctkpueblo.org",
+      "photo": "/images/Todd-Johnson.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Randy Pfeffer",
+      "role": "Maintenance Coordinator",
+      "phone": "(719) 542-9248 Ext. 120",
+      "email": "rpfeffer@ctkpueblo.org",
+      "photo": "/images/Randy-Pfeffer.jpg",
+      "notes": ""
+    },
+    {
+      "name": "Gerald Garduno",
+      "role": "Landscaping",
+      "phone": "(719) 542-9248 Ext. 120",
+      "email": "ggarduno@ctkpueblo.org",
+      "photo": "/favicon.png",
+      "notes": ""
+    }
+  ]
+}
