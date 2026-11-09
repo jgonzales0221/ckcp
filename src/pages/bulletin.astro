@@ -20,6 +20,9 @@ const formatDate = (date) =>
     day: "numeric",
     timeZone: "UTC",
   });
+
+const pdfViewerUrl = (pdf) =>
+  `${pdf}#view=FitH&toolbar=0&navpanes=0`;
 ---
 
 <Base>
@@ -28,8 +31,8 @@ const formatDate = (date) =>
 
     <p class="intro">
       Stay connected with Christ the King Catholic Parish.
-      Read our weekly bulletin for parish news, upcoming
-      events, announcements, and more.
+      Read our weekly bulletin for parish news, announcements,
+      upcoming events, and important information.
     </p>
 
     {bulletins.length === 0 ? (
@@ -39,7 +42,9 @@ const formatDate = (date) =>
         <section class="latest-bulletin">
           <h2>Latest Bulletin</h2>
 
-          <h3 id="selected-title">{latest.data.title}</h3>
+          <h3 id="selected-title">
+            {latest.data.title}
+          </h3>
 
           <p class="bulletin-date" id="selected-date">
             {formatDate(latest.data.date)}
@@ -48,21 +53,21 @@ const formatDate = (date) =>
           <div class="bulletin-viewer">
             <iframe
               id="bulletin-frame"
-              src={`${latest.data.pdf}#view=FitH&zoom=page-width&toolbar=0&navpanes=0`}
+              src={pdfViewerUrl(latest.data.pdf)}
               title="Christ the King Parish Bulletin"
               loading="lazy"
             ></iframe>
           </div>
 
           <p class="pdf-fallback">
-            Having trouble viewing the bulletin?
+            If the bulletin does not display on your device,
             <a
               id="pdf-fallback-link"
               href={latest.data.pdf}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
-              Open the PDF
+              open it here.
             </a>
           </p>
         </section>
@@ -71,7 +76,9 @@ const formatDate = (date) =>
           <section class="archive">
             <h2>Previous Bulletins</h2>
 
-            <p>Select a bulletin below to read it above.</p>
+            <p class="archive-intro">
+              Select a previous bulletin to read it above.
+            </p>
 
             <div class="archive-list">
               {bulletins.slice(1).map((bulletin) => (
@@ -91,7 +98,9 @@ const formatDate = (date) =>
                     <small>{formatDate(bulletin.data.date)}</small>
                   </span>
 
-                  <span class="read-label">Read Bulletin</span>
+                  <span class="read-label">
+                    Read Bulletin
+                  </span>
                 </button>
               ))}
             </div>
@@ -116,11 +125,22 @@ const formatDate = (date) =>
 
       if (!pdf || !viewer) return;
 
-      viewer.setAttribute("src", `${pdf}#toolbar=0&navpanes=0`);
+      viewer.setAttribute(
+        "src",
+        `${pdf}#view=FitH&toolbar=0&navpanes=0`
+      );
 
-      if (title) title.textContent = bulletinTitle;
-      if (date) date.textContent = bulletinDate;
-      if (fallback) fallback.setAttribute("href", pdf);
+      if (title && bulletinTitle) {
+        title.textContent = bulletinTitle;
+      }
+
+      if (date && bulletinDate) {
+        date.textContent = bulletinDate;
+      }
+
+      if (fallback) {
+        fallback.setAttribute("href", pdf);
+      }
 
       document.querySelector(".latest-bulletin")?.scrollIntoView({
         behavior: "smooth",
@@ -172,8 +192,11 @@ const formatDate = (date) =>
     margin-bottom: 20px;
   }
 
+  /* Center and constrain the PDF viewer */
   .bulletin-viewer {
     width: 100%;
+    max-width: 800px;
+    margin: 24px auto;
     background: #f1f1f1;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -183,12 +206,13 @@ const formatDate = (date) =>
   .bulletin-viewer iframe {
     display: block;
     width: 100%;
-    height: 1050px;
+    height: 900px;
     border: none;
   }
 
   .pdf-fallback {
-    margin-top: 12px;
+    max-width: 800px;
+    margin: 12px auto;
     font-size: 0.9rem;
     color: #555;
   }
@@ -200,6 +224,10 @@ const formatDate = (date) =>
 
   .archive {
     margin-top: 40px;
+  }
+
+  .archive-intro {
+    margin-bottom: 20px;
   }
 
   .archive-list {
@@ -221,7 +249,8 @@ const formatDate = (date) =>
     transition: background 0.2s, border-color 0.2s;
   }
 
-  .archive-item:hover {
+  .archive-item:hover,
+  .archive-item:focus-visible {
     background: #f4f7fa;
     border-color: var(--blue);
   }
@@ -258,7 +287,7 @@ const formatDate = (date) =>
     }
 
     .bulletin-viewer iframe {
-      height: 650px;
+      height: 600px;
     }
 
     .archive-item {
@@ -270,3 +299,4 @@ const formatDate = (date) =>
     }
   }
 </style>
+
