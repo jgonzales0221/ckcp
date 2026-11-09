@@ -1,11 +1,6 @@
 ---
-title: "Bulletin: November 1, 2026 – Thirty-First Sunday in Ordinary Time"
-date: 2026-11-01
-pdf: /images/20261101B.pdf
+title: "Bulletin "
+date: 2026-11-08T20:27:00.000-07:00
+pdf: /images/bulletin.png
 ---
-
-Please read the current bulletin. The weekly bulletin is posted on Thursdays.
-
-[Download this week’s bulletin (PDF)](/images/20261101B.pdf)
-
-You can also view past bulletins at [Parishes Online](https://parishesonline.com/organization/christ-the-king-catholic-parish).
+Join us for Mardi Gras Celebration
