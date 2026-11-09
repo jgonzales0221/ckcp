@@ -1,26 +1,272 @@
+
 ---
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
 
-const bulletins = (await getCollection("bulletins")).sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const bulletins = (await getCollection("bulletins"))
+  .filter((bulletin) => bulletin.data.pdf)
+  .sort(
+    (a, b) =>
+      new Date(b.data.date).getTime() -
+      new Date(a.data.date).getTime()
+  );
+
+const latest = bulletins[0];
+
+const formatDate = (date) =>
+  new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 ---
+
 <Base>
-  <section class="page">
-    <h1>Bulletin</h1>
+  <section class="page bulletin-page">
+    <h1>Parish Bulletins</h1>
 
-    {bulletins.length === 0 && <p>No bulletins posted yet.</p>}
+    <p class="intro">
+      Stay connected with Christ the King Catholic Parish.
+      Read our weekly bulletin for parish news, upcoming
+      events, announcements, and more.
+    </p>
 
-    {bulletins.map((bulletin) => (
-      <article>
-        <h2>{bulletin.data.title}</h2>
-        <p><small>{new Date(bulletin.data.date).toLocaleDateString()}</small></p>
-        <div set:html={bulletin.body} />
-        {bulletin.data.pdf && (
-          <p><a href={bulletin.data.pdf} target="_blank" rel="noopener">Download PDF</a></p>
+    {bulletins.length === 0 ? (
+      <p>No bulletins have been posted yet.</p>
+    ) : (
+      <>
+        <section class="latest-bulletin">
+          <h2>Latest Bulletin</h2>
+
+          <h3 id="selected-title">{latest.data.title}</h3>
+
+          <p class="bulletin-date" id="selected-date">
+            {formatDate(latest.data.date)}
+          </p>
+
+          <div class="bulletin-viewer">
+            <iframe
+              id="bulletin-frame"
+              src={`${latest.data.pdf}#toolbar=0&navpanes=0`}
+              title="Christ the King Parish Bulletin"
+              loading="lazy"
+            ></iframe>
+          </div>
+
+          <p class="pdf-fallback">
+            Having trouble viewing the bulletin?
+            <a
+              id="pdf-fallback-link"
+              href={latest.data.pdf}
+              target="_blank"
+              rel="noopener"
+            >
+              Open the PDF
+            </a>
+          </p>
+        </section>
+
+        {bulletins.length > 1 && (
+          <section class="archive">
+            <h2>Previous Bulletins</h2>
+
+            <p>Select a bulletin below to read it above.</p>
+
+            <div class="archive-list">
+              {bulletins.slice(1).map((bulletin) => (
+                <button
+                  type="button"
+                  class="archive-item"
+                  data-pdf={bulletin.data.pdf}
+                  data-title={bulletin.data.title}
+                  data-date={formatDate(bulletin.data.date)}
+                >
+                  <span class="archive-icon" aria-hidden="true">
+                    📄
+                  </span>
+
+                  <span class="archive-details">
+                    <strong>{bulletin.data.title}</strong>
+                    <small>{formatDate(bulletin.data.date)}</small>
+                  </span>
+
+                  <span class="read-label">Read Bulletin</span>
+                </button>
+              ))}
+            </div>
+          </section>
         )}
-      </article>
-    ))}
+      </>
+    )}
   </section>
 </Base>
+
+<script>
+  const viewer = document.querySelector("#bulletin-frame");
+  const title = document.querySelector("#selected-title");
+  const date = document.querySelector("#selected-date");
+  const fallback = document.querySelector("#pdf-fallback-link");
+
+  document.querySelectorAll(".archive-item").forEach((button) => {
+    button.addEventListener("click", () => {
+      const pdf = button.getAttribute("data-pdf");
+      const bulletinTitle = button.getAttribute("data-title");
+      const bulletinDate = button.getAttribute("data-date");
+
+      if (!pdf || !viewer) return;
+
+      viewer.setAttribute("src", `${pdf}#toolbar=0&navpanes=0`);
+
+      if (title) title.textContent = bulletinTitle;
+      if (date) date.textContent = bulletinDate;
+      if (fallback) fallback.setAttribute("href", pdf);
+
+      document.querySelector(".latest-bulletin")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  });
+</script>
+
+<style>
+  .bulletin-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  .bulletin-page h1 {
+    text-align: center;
+    color: var(--blue);
+    margin-bottom: 16px;
+  }
+
+  .intro {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .latest-bulletin {
+    margin-bottom: 50px;
+  }
+
+  .latest-bulletin h2,
+  .archive h2 {
+    color: var(--blue);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .latest-bulletin h3 {
+    color: var(--blue);
+    margin-bottom: 5px;
+  }
+
+  .bulletin-date {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .bulletin-viewer {
+    width: 100%;
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .bulletin-viewer iframe {
+    display: block;
+    width: 100%;
+    height: 1050px;
+    border: none;
+  }
+
+  .pdf-fallback {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .pdf-fallback a {
+    color: var(--blue);
+    text-decoration: underline;
+  }
+
+  .archive {
+    margin-top: 40px;
+  }
+
+  .archive-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .archive-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .archive-item:hover {
+    background: #f4f7fa;
+    border-color: var(--blue);
+  }
+
+  .archive-icon {
+    font-size: 1.8rem;
+  }
+
+  .archive-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .archive-details strong {
+    color: var(--blue);
+    font-size: 1rem;
+  }
+
+  .archive-details small {
+    color: #666;
+  }
+
+  .read-label {
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 700px) {
+    .bulletin-page {
+      padding: 24px 16px;
+    }
+
+    .bulletin-viewer iframe {
+      height: 650px;
+    }
+
+    .archive-item {
+      padding: 14px;
+    }
+
+    .read-label {
+      display: none;
+    }
+  }
+</style>
