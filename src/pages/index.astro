@@ -1,12 +1,31 @@
+
 ---
 import Base from "../layouts/Base.astro";
+import parishInfo from "../data/parish-info.json";
 
 const slides = [
-  { src: "/images/church-front.jpg", alt: "Christ the King Catholic Parish", caption: "Christ the King Catholic Parish", credit: "Photo by Christ the King" },
-  { src: "/images/sanctuary.jpg", alt: "Sanctuary", caption: "Join us for Mass", credit: "Photo by Brittney" },
-  { src: "/images/parish-life.jpg", alt: "Parish life", caption: "A parish in Belmont, Pueblo", credit: "Photo by Steve Eller", creditHref: "https://www.ellerdrone.com/" },
+  {
+    src: "/images/church-front.jpg",
+    alt: "Christ the King Catholic Parish",
+    caption: "Christ the King Catholic Parish",
+    credit: "Photo by Christ the King"
+  },
+  {
+    src: "/images/sanctuary.jpg",
+    alt: "Sanctuary",
+    caption: "Join us for Mass",
+    credit: "Photo by Brittney"
+  },
+  {
+    src: "/images/parish-life.jpg",
+    alt: "Parish life",
+    caption: "A parish in Belmont, Pueblo",
+    credit: "Photo by Steve Eller",
+    creditHref: "https://www.ellerdrone.com/"
+  }
 ];
 ---
+
 <Base>
   <section class="hero" aria-label="Parish photos">
     {slides.map((slide, i) => (
@@ -16,7 +35,9 @@ const slides = [
           <figcaption>
             <span class="caption">{slide.caption}</span>
             {slide.creditHref ? (
-              <a href={slide.creditHref} class="credit">{slide.credit}</a>
+              <a href={slide.creditHref} class="credit">
+                {slide.credit}
+              </a>
             ) : (
               <span class="credit">{slide.credit}</span>
             )}
@@ -24,27 +45,54 @@ const slides = [
         </div>
       </figure>
     ))}
-    <button class="prev" type="button" aria-label="Previous photo">‹</button>
-    <button class="next" type="button" aria-label="Next photo">›</button>
+
+    <button class="prev" type="button" aria-label="Previous photo">
+      ‹
+    </button>
+    <button class="next" type="button" aria-label="Next photo">
+      ›
+    </button>
   </section>
 
   <section class="info">
     <div>
       <h2>Mass Schedule</h2>
-      <p>Saturday: 4:00 p.m.</p>
-      <p>Sunday: 8:00 a.m., 11:00 a.m., 7:00 p.m.</p>
-      <p>Tuesday–Friday: 7:30 a.m.</p>
+
+      {parishInfo.mass_schedule.map((mass) => (
+        <p>{mass.day}: {mass.time}</p>
+      ))}
     </div>
+
     <div>
       <h2>Confession</h2>
-      <p>Saturday: 2:45–3:45 p.m.</p>
-      <p>Or by appointment</p>
+
+      {parishInfo.confession_schedule.map((confession) => (
+        <p>{confession.day}: {confession.time}</p>
+      ))}
+
+      {parishInfo.confession_notes && (
+        <p>{parishInfo.confession_notes}</p>
+      )}
     </div>
+
     <div>
       <h2>Office</h2>
-      <p>1708 Horseshoe Drive</p>
-      <p>Pueblo, CO 81001</p>
-      <p>(719) 542-9248</p>
+
+      <p>{parishInfo.office_address}</p>
+      <p>{parishInfo.office_city}</p>
+
+      <p>
+        <a href={`tel:${parishInfo.office_phone.replace(/[^+\d]/g, "")}`}>
+          {parishInfo.office_phone}
+        </a>
+      </p>
+
+      {parishInfo.office_hours && (
+        <div class="office-hours">
+          <h3>Office Hours</h3>
+          <p>{parishInfo.office_hours}</p>
+        </div>
+      )}
     </div>
   </section>
 </Base>
@@ -52,14 +100,28 @@ const slides = [
 <script>
   const slides = [...document.querySelectorAll(".slide")];
   let current = 0;
+
   const show = (n) => {
+    if (slides.length === 0) return;
+
     slides[current].classList.remove("active");
     current = (n + slides.length) % slides.length;
     slides[current].classList.add("active");
   };
-  document.querySelector(".next")?.addEventListener("click", () => show(current + 1));
-  document.querySelector(".prev")?.addEventListener("click", () => show(current - 1));
-  setInterval(() => show(current + 1), 6000);
+
+  document.querySelector(".next")?.addEventListener(
+    "click",
+    () => show(current + 1)
+  );
+
+  document.querySelector(".prev")?.addEventListener(
+    "click",
+    () => show(current - 1)
+  );
+
+  if (slides.length > 1) {
+    setInterval(() => show(current + 1), 6000);
+  }
 </script>
 
 <style>
@@ -136,8 +198,13 @@ const slides = [
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
   }
 
-  .prev { left: 12px; }
-  .next { right: 12px; }
+  .prev {
+    left: 12px;
+  }
+
+  .next {
+    right: 12px;
+  }
 
   .info {
     display: grid;
@@ -153,12 +220,33 @@ const slides = [
     font-family: "Source Sans 3", sans-serif;
   }
 
+  .info h3 {
+    color: white;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
+
   .info p {
     font-size: 1.3rem;
     line-height: 1.5;
   }
 
+  .info a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .info a:hover {
+    text-decoration: underline;
+  }
+
+  .office-hours p {
+    white-space: pre-line;
+  }
+
   @media (max-width: 700px) {
-    .info { grid-template-columns: 1fr; }
+    .info {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
