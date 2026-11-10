@@ -1,3 +1,4 @@
+
 ---
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
@@ -19,10 +20,8 @@ const formatDate = (date) =>
     day: "numeric",
     timeZone: "UTC",
   });
-
-const pdfViewerUrl = (pdf) =>
-  `${pdf}#view=FitH&zoom=page-width&toolbar=0&navpanes=0`;
 ---
+
 <Base>
   <section class="page bulletin-page">
     <h1>Parish Bulletins</h1>
@@ -43,13 +42,44 @@ const pdfViewerUrl = (pdf) =>
             {formatDate(latest.data.date)}
           </p>
 
-          <div class="bulletin-viewer">
-            <iframe
-              id="bulletin-frame"
-              src={pdfViewerUrl(latest.data.pdf)}
-              title="Christ the King Parish Bulletin"
-              loading="lazy"
-            ></iframe>
+          <div
+            class="bulletin-viewer"
+            id="bulletin-viewer"
+            data-pdf={latest.data.pdf}
+          >
+            <div class="pdf-toolbar">
+              <button
+                id="prev-page"
+                type="button"
+                disabled
+              >
+                &#8592; Previous
+              </button>
+
+              <span id="page-info" aria-live="polite">
+                Loading bulletin...
+              </span>
+
+              <button
+                id="next-page"
+                type="button"
+                disabled
+              >
+                Next &#8594;
+              </button>
+            </div>
+
+            <div class="pdf-stage" id="pdf-stage">
+              <canvas
+                id="pdf-canvas"
+                role="img"
+                aria-label="Current bulletin page"
+              ></canvas>
+
+              <p id="pdf-status" role="status">
+                Loading bulletin...
+              </p>
+            </div>
           </div>
 
           <p class="pdf-fallback">
@@ -71,6 +101,7 @@ const pdfViewerUrl = (pdf) =>
             <p class="archive-intro">
               Select a previous bulletin to read it above.
             </p>
+
             <div class="archive-list">
               {bulletins.slice(1).map((bulletin) => (
                 <button
@@ -80,12 +111,23 @@ const pdfViewerUrl = (pdf) =>
                   data-title={bulletin.data.title}
                   data-date={formatDate(bulletin.data.date)}
                 >
-                  <span class="archive-icon" aria-hidden="true">📄</span>
+                  <span
+                    class="archive-icon"
+                    aria-hidden="true"
+                  >
+                    📄
+                  </span>
+
                   <span class="archive-details">
                     <strong>{bulletin.data.title}</strong>
-                    <small>{formatDate(bulletin.data.date)}</small>
+                    <small>
+                      {formatDate(bulletin.data.date)}
+                    </small>
                   </span>
-                  <span class="read-label">Read Bulletin</span>
+
+                  <span class="read-label">
+                    Read Bulletin
+                  </span>
                 </button>
               ))}
             </div>
@@ -97,34 +139,356 @@ const pdfViewerUrl = (pdf) =>
 </Base>
 
 <script>
-  const viewer = document.querySelector("#bulletin-frame");
-  const title = document.querySelector("#selected-title");
-  const date = document.querySelector("#selected-date");
-  const fallback = document.querySelector("#pdf-fallback-link");
+  import * as pdfjsLib from "pdfjs-dist";
+  import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 
-  document.querySelectorAll(".archive-item").forEach((button) => {
-    button.addEventListener("click", () => {
-      const pdf = button.getAttribute("data-pdf");
-      const bulletinTitle = button.getAttribute("data-title");
-      const bulletinDate = button.getAttribute("data-date");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
-      if (!pdf || !viewer) return;
+  function initializeBulletin() {
+    const viewer = document.querySelector(
+      "#bulletin-viewer"
+    ) as HTMLElement | null;
 
-      viewer.setAttribute(
-        "src",
-        `${pdf}#view=FitH&zoom=page-width&toolbar=0&navpanes=0`
-      );
+    const canvas = document.querySelector(
+      "#pdf-canvas"
+    ) as HTMLCanvasElement | null;
 
-      if (title && bulletinTitle) title.textContent = bulletinTitle;
-      if (date && bulletinDate) date.textContent = bulletinDate;
-      if (fallback) fallback.setAttribute("href", pdf);
+    const stage = document.querySelector(
+      "#pdf-stage"
+    ) as HTMLElement | null;
 
-      document.querySelector(".latest-bulletin")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+    const status = document.querySelector(
+      "#pdf-status"
+    ) as HTMLElement | null;
+
+    const pageInfo = document.querySelector(
+      "#page-info"
+    ) as HTMLElement | null;
+
+    const prevButton = document.querySelector(
+      "#prev-page"
+    ) as HTMLButtonElement | null;
+
+    const nextButton = document.querySelector(
+      "#next-page"
+    ) as HTMLButtonElement | null;
+
+    const title = document.querySelector(
+      "#selected-title"
+    );
+
+    const date = document.querySelector(
+      "#selected-date"
+    );
+
+    const fallback = document.querySelector(
+      "#pdf-fallback-link"
+    ) as HTMLAnchorElement | null;
+
+    if (
+      !viewer ||
+      !canvas ||
+      !stage ||
+      !status ||
+      !pageInfo ||
+      !prevButton ||
+      !nextButton
+    ) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+
+    if (!context) return;
+
+    let pdfDocument: pdfjsLib.PDFDocumentProxy | null = null;
+    let loadingTask: ReturnType<typeof pdfjsLib.getDocument> | null = null;
+    let renderTask: ReturnType<pdfjsLib.PDFPageProxy["render"]> | null = null;
+    let currentPage = 1;
+    let loadVersion = 0;
+    let renderVersion = 0;
+    let destroyed = false;
+
+    function updateControls() {
+      prevButton!.disabled =
+        !pdfDocument || currentPage <= 1;
+
+      nextButton!.disabled =
+        !pdfDocument ||
+        currentPage >= pdfDocument.numPages;
+
+      pageInfo!.textContent = pdfDocument
+        ? `Page ${currentPage} of ${pdfDocument.numPages}`
+        : "Loading bulletin...";
+    }
+
+    async function renderPage() {
+      if (!pdfDocument || destroyed) return;
+
+      const version = ++renderVersion;
+      const documentToRender = pdfDocument;
+      const pageNumber = currentPage;
+
+      if (renderTask) {
+        renderTask.cancel();
+
+        try {
+          await renderTask.promise;
+        } catch {
+        }
+
+        renderTask = null;
+      }
+
+      if (version !== renderVersion || destroyed) return;
+
+      try {
+        const page = await documentToRender.getPage(
+          pageNumber
+        );
+
+        if (
+          version !== renderVersion ||
+          destroyed ||
+          documentToRender !== pdfDocument
+        ) {
+          return;
+        }
+
+        const baseViewport = page.getViewport({
+          scale: 1,
+        });
+
+        const stageStyles = getComputedStyle(stage!);
+
+        const availableWidth = Math.max(
+          1,
+          stage!.clientWidth -
+            parseFloat(stageStyles.paddingLeft) -
+            parseFloat(stageStyles.paddingRight)
+        );
+
+        const availableHeight = Math.max(
+          1,
+          stage!.clientHeight -
+            parseFloat(stageStyles.paddingTop) -
+            parseFloat(stageStyles.paddingBottom)
+        );
+
+        const scale = Math.min(
+          availableWidth / baseViewport.width,
+          availableHeight / baseViewport.height
+        );
+
+        const viewport = page.getViewport({ scale });
+
+        const pixelRatio = Math.min(
+          window.devicePixelRatio || 1,
+          2
+        );
+
+        canvas!.width = Math.floor(
+          viewport.width * pixelRatio
+        );
+
+        canvas!.height = Math.floor(
+          viewport.height * pixelRatio
+        );
+
+        canvas!.style.width = `${viewport.width}px`;
+        canvas!.style.height = `${viewport.height}px`;
+
+        status!.hidden = true;
+
+        renderTask = page.render({
+          canvas: canvas!,
+          canvasContext: context!,
+          viewport,
+          transform:
+            pixelRatio !== 1
+              ? [pixelRatio, 0, 0, pixelRatio, 0, 0]
+              : undefined,
+        });
+
+        await renderTask.promise;
+
+        if (version === renderVersion) {
+          updateControls();
+        }
+      } catch (error: any) {
+        if (
+          error?.name === "RenderingCancelledException"
+        ) {
+          return;
+        }
+
+        console.error("PDF rendering error:", error);
+
+        if (version === renderVersion && !destroyed) {
+          status!.hidden = false;
+          status!.textContent =
+            "Unable to display this bulletin page.";
+        }
+      }
+    }
+
+    async function loadPdf(pdfUrl: string) {
+      const version = ++loadVersion;
+      ++renderVersion;
+
+      if (renderTask) {
+        renderTask.cancel();
+
+        try {
+          await renderTask.promise;
+        } catch {
+        }
+
+        renderTask = null;
+      }
+
+      const previousDocument = pdfDocument;
+      pdfDocument = null;
+
+      if (previousDocument) {
+        await previousDocument.destroy();
+      }
+
+      if (version !== loadVersion || destroyed) return;
+
+      currentPage = 1;
+      canvas!.width = 0;
+      canvas!.height = 0;
+      status!.hidden = false;
+      status!.textContent = "Loading bulletin...";
+      updateControls();
+
+      try {
+        loadingTask = pdfjsLib.getDocument(pdfUrl);
+        const loadedDocument = await loadingTask.promise;
+
+        if (version !== loadVersion || destroyed) {
+          await loadedDocument.destroy();
+          return;
+        }
+
+        pdfDocument = loadedDocument;
+        updateControls();
+        await renderPage();
+      } catch (error) {
+        if (version !== loadVersion || destroyed) return;
+
+        console.error("PDF loading error:", error);
+
+        status!.hidden = false;
+        status!.textContent =
+          "The bulletin could not be loaded. Please use the link below.";
+
+        pageInfo!.textContent = "Bulletin unavailable";
+        prevButton!.disabled = true;
+        nextButton!.disabled = true;
+      }
+    }
+
+    prevButton.addEventListener("click", () => {
+      if (!pdfDocument || currentPage <= 1) return;
+
+      currentPage--;
+      updateControls();
+      void renderPage();
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (
+        !pdfDocument ||
+        currentPage >= pdfDocument.numPages
+      ) {
+        return;
+      }
+
+      currentPage++;
+      updateControls();
+      void renderPage();
+    });
+
+    document.querySelectorAll<HTMLElement>(
+      ".archive-item"
+    ).forEach((button) => {
+      button.addEventListener("click", () => {
+        const pdf = button.dataset.pdf;
+        const bulletinTitle = button.dataset.title;
+        const bulletinDate = button.dataset.date;
+
+        if (!pdf) return;
+
+        if (title && bulletinTitle) {
+          title.textContent = bulletinTitle;
+        }
+
+        if (date && bulletinDate) {
+          date.textContent = bulletinDate;
+        }
+
+        if (fallback) {
+          fallback.href = pdf;
+        }
+
+        void loadPdf(pdf);
+
+        document.querySelector(
+          ".latest-bulletin"
+        )?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       });
     });
-  });
+
+    let resizeFrame = 0;
+
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(resizeFrame);
+
+      resizeFrame = requestAnimationFrame(() => {
+        if (pdfDocument && !destroyed) {
+          void renderPage();
+        }
+      });
+    });
+
+    observer.observe(stage);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        destroyed = true;
+        ++loadVersion;
+        ++renderVersion;
+        observer.disconnect();
+        cancelAnimationFrame(resizeFrame);
+        renderTask?.cancel();
+        void loadingTask?.destroy();
+        void pdfDocument?.destroy();
+      },
+      { once: true }
+    );
+
+    const initialPdf = viewer.dataset.pdf;
+
+    if (initialPdf) {
+      void loadPdf(initialPdf);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initializeBulletin,
+      { once: true }
+    );
+  } else {
+    initializeBulletin();
+  }
 </script>
 
 <style>
@@ -177,14 +541,81 @@ const pdfViewerUrl = (pdf) =>
     border: 1px solid #ddd;
     border-radius: 6px;
     overflow: hidden;
-    height: 1000px;
   }
 
-  .bulletin-viewer iframe {
-    display: block;
-    width: 118%;
-    height: 1100px;
+  .pdf-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 16px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .pdf-toolbar button {
+    padding: 10px 16px;
     border: none;
+    border-radius: 5px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pdf-toolbar button:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  .pdf-toolbar button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  #page-info {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  .pdf-stage {
+    width: 100%;
+    height: min(80vh, 1050px);
+    min-height: 300px;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: #f1f1f1;
+  }
+
+  #pdf-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  #pdf-status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    background: #f1f1f1;
+    color: #555;
+  }
+
+  #pdf-status[hidden] {
+    display: none;
   }
 
   .pdf-fallback {
@@ -263,8 +694,24 @@ const pdfViewerUrl = (pdf) =>
       padding: 24px 16px;
     }
 
-    .bulletin-viewer iframe {
-      height: 700px;
+    .pdf-toolbar {
+      gap: 8px;
+      padding: 12px 8px;
+    }
+
+    .pdf-toolbar button {
+      padding: 9px 10px;
+      font-size: 0.8rem;
+    }
+
+    #page-info {
+      font-size: 0.8rem;
+    }
+
+    .pdf-stage {
+      height: 65vh;
+      min-height: 280px;
+      padding: 8px;
     }
 
     .archive-item {
@@ -276,4 +723,5 @@ const pdfViewerUrl = (pdf) =>
     }
   }
 </style>
+
 
